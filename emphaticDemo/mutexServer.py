@@ -5,7 +5,7 @@ import socket
 from _thread import *
 import threading 
   
-print_lock = threading.Lock() 
+mutex = threading.Lock() 
   
 def threaded(mutexCli): 
     picture = ""
@@ -19,16 +19,10 @@ def threaded(mutexCli):
             download = mutexCli.recv(1024)
         infile.close()
         print(picture + "Download Complete!")
+        mutexCli.send("File Received!") 
         if not data: 
             print('Closing') 
-              
-            print_lock.release() 
-            break
-  
-        data = data[::-1] 
-  
-        mutexCli.send(data) 
-  
+            break    
     mutexCli.close() 
   
   
@@ -47,10 +41,11 @@ def Main():
   
         mutexCli, addr = mutexServe.accept() 
   
-        print_lock.acquire() 
+        mutex.acquire() 
         print('Connected to :', addr[0], ':', addr[1]) 
   
         start_new_thread(threaded, (mutexCli,)) 
+        mutex.release()
     mutexServe.close() 
   
   
