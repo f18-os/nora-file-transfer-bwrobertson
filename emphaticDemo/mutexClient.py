@@ -1,42 +1,25 @@
+import socket               # Import socket module
 
-import socket 
-  
-  
-def Main(): 
-    host = socket.gethostname()
-    port = 50002
-  
-    mutexSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 
-  
-    mutexSocket.connect((host,port)) 
-    fileFound = False
-    file = ""
-    while True: 
-        while(fileFound == False):
-            file = input("Please enter the file you want to send\n")
-            try:
-                outfile = open(file,'rb')
-                fileFound = True
-            except IOError:
-                print("File not found. Please enter correct file name!")
-        print("Uploading file...")
-        upload = outfile.read(1024)
-        while(upload):
-            print("Uploading file...")
-            mutexSocket.send(upload)
-            upload = outfile.read(1024) 
-        outfile.close()
-        print(file + " Upload complete!")
-        data = mutexSocket.recv(1024) 
-  
-        print('Received from the server :',str(data)) 
-   
-        again = input('\nSend another message(y/n) :') 
-        if again == 'y': 
-            continue
-        else: 
-            break
-    mutexSocket.close() 
-  
-if __name__ == '__main__': 
-    Main() 
+s = socket.socket()         # Create a socket object
+host = socket.gethostname() # Get local machine name
+port = 50001                 # Reserve a port for your service.
+
+s.connect((host, port))
+fileFound = False
+while(fileFound == False):
+	print("Please enter the file you want to send") 
+	picture = input() #designates the file you want to send
+	try:
+		outfile = open(picture,'rb')
+		fileFound = True
+	except IOError:
+		print("File not found. Please enter correct file name!")
+print('Uploading file...')
+upload = outfile.read(1024) #sends the file 100 bytes at a time
+while (upload):
+    print('Uploading file...') #Lets the user know that the process is...processing
+    s.send(upload)
+    upload = outfile.read(1024)
+outfile.close()
+print("Upload complete!")
+s.close 
