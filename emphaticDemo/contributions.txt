@@ -1,0 +1,7 @@
+I recycled my lab from last week with the forking. I just changed the forking to mutex and theads.
+
+I received no aid from classmates on this assignment.
+
+I used these websites as reference.
+
+https://www.geeksforgeeks.org/socket-programming-multi-threading-python/
